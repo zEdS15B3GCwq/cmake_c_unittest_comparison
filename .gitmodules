@@ -1,0 +1,9 @@
+[submodule "external/cunit"]
+	path = external/cunit
+	url = http://gitlab.com/cunity/cunit
+[submodule "external/libcester"]
+	path = external/libcester
+	url = https://github.com/exoticlibraries/libcester.git
+[submodule "external/unity"]
+	path = external/unity
+	url = https://github.com/ThrowTheSwitch/Unity.git
