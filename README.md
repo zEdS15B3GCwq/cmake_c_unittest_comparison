@@ -12,35 +12,36 @@ This is, obviously, a work in progress.
 
 ## 2. List of Candidates
 
-1. [Unity](http://www.throwtheswitch.org/unity)
-2. [GLib testing framework](https://docs.gtk.org/glib/testing.html)
-3. [cmocka](https://cmocka.org/)
-4. [µnit (munit)](https://nemequ.github.io/munit/)
-5. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
-6. [Cgreen](https://github.com/cgreen-devs/cgreen)
-7. [Criterion](https://github.com/Snaipe/Criterion/)
-8. [tau](https://github.com/jasmcaus/tau/)
-9. [libcester](https://github.com/exoticlibraries/libcester)
+1. [GLib testing framework](https://docs.gtk.org/glib/testing.html)
+2. [cmocka](https://cmocka.org/)
+3. [µnit (munit)](https://nemequ.github.io/munit/)
+4. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
+5. [Cgreen](https://github.com/cgreen-devs/cgreen)
+6. [Criterion](https://github.com/Snaipe/Criterion/)
+7. [tau](https://github.com/jasmcaus/tau/)
+8. [libcester](https://github.com/exoticlibraries/libcester)
 
 ## 3. Impressions
 
 ### 3.1 Cunit (Cunity fork)
 
-Websites:
+**Websites**:
 
 - fork homepage: <https://cunity.gitlab.io/cunit/>
 - fork repo: <https://gitlab.com/cunity/cunit/-/tree/master/>
 - original home: <https://cunit.sourceforge.net/example.html>
 
-Maintainers: single developer
+**Maintainers**: single developer
 
-Activity: inactive; besides a recent version bump, last commit was >1 year ago
+**Activity**: inactive; besides a recent version bump, last commit was >1 year ago.
 
-Maturity: long existing, mature code
+**Maturity**: long existing, mature code
 
-Documentation: not much, but enough for the simplest use case; beyond that, one needs to look at the code.
+**Popularity**: mentioned in multiple forum discussions; it's well known, I guess.
 
-CMake integration: very easy, project comes with own CMakeFile.txt; no special build dependencies
+**Documentation**: the new fork has some documentation for a simple case using the new CUnitCI API; there's documentation on the old website for the traditional API, but that requires a longer learning process.
+
+**CMake integration**: very easy, project comes with own CMakeFile.txt; no special build dependencies
 
 ```CMake
     set(CUNIT_DISABLE_EXAMPLES yes)
@@ -49,13 +50,79 @@ CMake integration: very easy, project comes with own CMakeFile.txt; no special b
     add_subdirectory(cunit/CUnit)
 ```
 
-Features: sufficient
+**Features**: sufficient
 
-- suite and pre-test setup / teardown functions
-- test context shared via global variables
-- easy to use with one executable / test code file  (see [single_suite](tests/cunit/single_suite/) example)
-- multiple tests / suites can be linked into one executable but this case isn't well documented (see [multi_suite](tests/cunit/multi_suite/) example)
+- [x] suite and pre-test setup / teardown functions
+- [x] test context shared via global variables
+- [x] easy to use with one executable / test code file  (see [single_suite](tests/cunit/single_suite/) example)
+- [x] multiple tests / suites can be linked into one executable but this case isn't well documented (see [multi_suite](tests/cunit/multi_suite/) example)
+- [x] failed tests show executed code
+- [ ] cannot include custom messages in failed test output
+- [ ] variable values not shown in failed tests
+- [ ] no direct support for mocking
 
-Output: terminal + XML
+**Output**: terminal + XML
 
 ![CUnit test result output](images/results_cunit.png)
+
+**Issues**:
+
+In case of multiple failing assertions in one test, only the last one's code is reported to the command line!:O See: only `CU_ASSERT_EQUAL( 99, identity( a ) )` is shown in [single_suite/test_identity_should_fail](tests/cunit/single_suite/single_suite.c). This means that it's better to use _FATAL asserts or single asserts per test.
+
+### 3.2 Unity
+
+**Websites**:
+
+- home: <http://www.throwtheswitch.org/unity>
+- repo: <https://github.com/ThrowTheSwitch/Unity>
+
+**Maintainers**:
+
+**Activity**:
+
+**Maturity**:
+
+**Popularity**:
+
+**Documentation**:
+
+**CMake integration**:
+
+**Features**:
+
+- [ ] aaa
+
+**Output**:
+
+![aaa]()
+
+**Issues**:
+
+### Template
+
+**Websites**:
+
+- home: <url>
+- repo: <url>
+
+**Maintainers**:
+
+**Activity**:
+
+**Maturity**:
+
+**Popularity**:
+
+**Documentation**:
+
+**CMake integration**:
+
+**Features**:
+
+- [ ] feature
+
+**Output**:
+
+![image]()
+
+**Issues**:

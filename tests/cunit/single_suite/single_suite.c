@@ -1,4 +1,5 @@
 #include "CUnit/CUnitCI.h"
+#include "CUnit/CUnit.h"
 #include "utils.h"
 
 int a = 0;
@@ -9,21 +10,22 @@ CU_SUITE_SETUP() {
 }
 
 CU_SUITE_TEARDOWN() {
-    CU_ASSERT_FATAL( a == 1 );
+    CU_ASSERT( a == 1 );
     a = 0;
     return CUE_SUCCESS;
 }
 
 void test_identity_should_pass( void )
 {
-    CU_ASSERT_FATAL( 40 == identity( 40 ) );
-    CU_ASSERT_FATAL( 1 == identity( a ) );
+    CU_ASSERT( 40 == identity( 40 ) );
+    CU_ASSERT_EQUAL( 1, identity( a ) );
 }
 
 
 void test_identity_should_fail( void )
 {
-    CU_ASSERT_FATAL( 0 == identity( a ) );
+    CU_ASSERT( 0 == identity( a ) );
+    CU_ASSERT_EQUAL( 99, identity( a ) );
 }
 
 CUNIT_CI_RUN( "cunit_single_suite",

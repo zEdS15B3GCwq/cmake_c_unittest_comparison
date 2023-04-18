@@ -10,19 +10,19 @@ CU_SUITE_SETUP() {
 }
 
 CU_SUITE_TEARDOWN() {
-    CU_ASSERT_FATAL( a == 2 );
+    CU_ASSERT( a == 2 );
     a = 0;
     return CUE_SUCCESS;
 }
 
 static void test_a_identity_should_pass( void )
 {
-    CU_ASSERT_FATAL( 2 == identity( a ) );
+    CU_ASSERT( 2 == identity( a ) );
 }
 
 static void test_a_identity_should_fail( void )
 {
-    CU_ASSERT_FATAL( 0 == identity( a ) );
+    CU_ASSERT( 0 == identity( a ) );
 }
 
 void register_suite_a( void )
