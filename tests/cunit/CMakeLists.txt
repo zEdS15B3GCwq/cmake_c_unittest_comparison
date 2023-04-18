@@ -1,2 +1,2 @@
-add_subdirectory(suite_1)
-add_subdirectory(suite_2)
+add_subdirectory(single_suite)
+add_subdirectory(multi_suite)

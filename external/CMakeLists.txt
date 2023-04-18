@@ -15,6 +15,6 @@ elseif(TARGET_GROUP STREQUAL test_cunit)
     set(CUNIT_DISABLE_EXAMPLES yes)
     set(CUNIT_DISABLE_TESTS yes)
 
-    add_subdirectory(cunit)
+    add_subdirectory(cunit/CUnit)
 
 endif()

@@ -1,29 +1,61 @@
-# cmake_c_unittest_comparison
+# C Unit Test Comparison with CMake
+
 Comparison of C language unit testing frameworks with CMake (CUnit, Unity, cmocka etc)
 
-### Purpose
+## 1. Purpose
 
-I'm on the search for a simple unit testing framework for pure C. Some frameworks are more popular and are mentioned in many forum discussions, such as Unity / Ceedling, CUnit, cmocka, but there are plenty other less known ones that could be just as good. C++ frameworks are excluded (google test, boost test, cppunit and alike) even if they're supposed to work well with C. I don't want to bother with mixed code.
+I'm on the search for a simple unit testing framework for pure C. Some frameworks are more popular and are mentioned in many forum discussions, such as Unity / Ceedling, CUnit, cmocka, but there are plenty other less known ones that could be just as good. I'm looking for one that has informative output, is easy to build / integrate, is easy to learn (no lengthy documentation), and is actively maintained and can be expected to be around for a while (good history, adaptation, number of maintainers). It's all going to be quite superficial, first-impressions level, because I don't want to waste a lot of time getting to know a complex system.
 
-As I explore different options, I check a few points about them, such as how actively they're maintained, number of maintainers, how easy they're to integrate into a simple CMake / CTest project, how informative the output is and so on. I'm not going to waste a lot of time on each framewok - it's going to be mostly first-impressions level, so don't expect deep insights. First I need to reduce the list to a few best options, that's what these notes are for.
+C++ frameworks are excluded (google test, boost test, cppunit and alike) even if they're supposed to work well with C. No mixed code for me.
 
-### Progress
+This is, obviously, a work in progress.
 
-This is obviously a work in progress.
+## 2. List of Candidates
 
-* Frameworks I've tried:
+1. [Unity](http://www.throwtheswitch.org/unity)
+2. [GLib testing framework](https://docs.gtk.org/glib/testing.html)
+3. [cmocka](https://cmocka.org/)
+4. [µnit (munit)](https://nemequ.github.io/munit/)
+5. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
+6. [Cgreen](https://github.com/cgreen-devs/cgreen)
+7. [Criterion](https://github.com/Snaipe/Criterion/)
+8. [tau](https://github.com/jasmcaus/tau/)
+9. [libcester](https://github.com/exoticlibraries/libcester)
 
-  this list is going to grow
+## 3. Impressions
 
-* List of frameworks I'm going to try (tentative, at best)
+### 3.1 Cunit (Cunity fork)
 
-  1. [CUnit](https://cunity.gitlab.io/cunit/) (CUnity fork)
-  2. [Unity](http://www.throwtheswitch.org/unity)
-  3. [GLib testing framework](https://docs.gtk.org/glib/testing.html)
-  4. [cmocka](https://cmocka.org/)
-  5. [µnit (munit)](https://nemequ.github.io/munit/)
-  6. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
-  7. [Cgreen](https://github.com/cgreen-devs/cgreen)
-  8. [Criterion](https://github.com/Snaipe/Criterion/)
-  9. [tau](https://github.com/jasmcaus/tau/)
-  10. [libcester](https://github.com/exoticlibraries/libcester)
+Websites:
+
+- fork homepage: <https://cunity.gitlab.io/cunit/>
+- fork repo: <https://gitlab.com/cunity/cunit/-/tree/master/>
+- original home: <https://cunit.sourceforge.net/example.html>
+
+Maintainers: single developer
+
+Activity: inactive; besides a recent version bump, last commit was >1 year ago
+
+Maturity: long existing, mature code
+
+Documentation: not much, but enough for the simplest use case; beyond that, one needs to look at the code.
+
+CMake integration: very easy, project comes with own CMakeFile.txt; no special build dependencies
+
+```CMake
+    set(CUNIT_DISABLE_EXAMPLES yes)
+    set(CUNIT_DISABLE_TESTS yes)
+
+    add_subdirectory(cunit/CUnit)
+```
+
+Features: sufficient
+
+- suite and pre-test setup / teardown functions
+- test context shared via global variables
+- easy to use with one executable / test code file  (see [single_suite](tests/cunit/single_suite/) example)
+- multiple tests / suites can be linked into one executable but this case isn't well documented (see [multi_suite](tests/cunit/multi_suite/) example)
+
+Output: terminal + XML
+
+![CUnit test result output](images/results_cunit.png)
