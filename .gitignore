@@ -1,2 +1,9 @@
-#output directory
 out/
+.vs/
+
+#CMakeFiles/
+#.ninja*
+#CMakeCache.txt
+#DartConfiguration.tcl
+#*.ninja
+#*.cmake

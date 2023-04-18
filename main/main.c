@@ -1,9 +1,10 @@
 #include <stdio.h>
-#include <module_sum.h>
+#include <utils.h>
 
 int main(void)
 {
-    printf("Sum of 1, 2, and 3: %d\n", sum_three(1, 2, 3));
+    int a = 42;
+    printf("%d is the same as %d\n", a, identity(a));
 
     return 0;
 }
