@@ -1,13 +1,5 @@
 if(TARGET_GROUP STREQUAL test_unity)
 
-# simply add required source files
-#    add_library(unity STATIC Unity/src/unity.c)
-#    target_include_directories(unity PUBLIC Unity/src)
-#    add_library(unity_fixture STATIC Unity/extras/fixture/src/unity_fixture.c)
-#    target_include_directories(unity_fixture PUBLIC Unity/extras/fixture/src)
-
-# or use included CMakeLists.txt
-
     set(UNITY_EXTENSION_FIXTURE yes CACHE BOOL "compile unity with fixtures extension")
 
     add_subdirectory(unity)
