@@ -11,6 +11,8 @@ if(TARGET_GROUP STREQUAL production)
 elseif(TARGET_GROUP STREQUAL test_unity)
     include(CTest)
 
+#    add_compile_definitions(UNITY_INCLUDE_EXEC_TIME UNITY_USE_COMMAND_LINE_ARGS)
+
     add_subdirectory(external)
     add_subdirectory(tests/unity)
 
