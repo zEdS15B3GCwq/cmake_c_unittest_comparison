@@ -119,23 +119,14 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 
 **Popularity**: many mentions, seems to be popular
 
-**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the 2nd example - OK, it's not meant to be the main way to use it. Some other things are very difficult to figure out. For example, I tried to get verbose output from the test executable. There's an undocumented function that parses command line arguments (verbose etc) in `unity_internals.h`, and while I was able to link it, it's not doing anything. Perhaps I could figure it out by looking more into it, but I don't understand why this simple functionality isn't more readily available. Apparently, `Ceedling` makes use of it to format output? Also, configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
-
-the framework is pretty simple to use and that usage has good documentation; however, more detailed docs are "hidden" as .md files in the repo, and the only reference on test groups (`unity_fixtures`) is the 2nd example
+**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the 2nd example - OK, it's not meant to be the main way to use Unity, but it's there. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
 
 **Ease of use**: easy; there's a "general" mode that suits 1 exe / code file, and a "test group" functionality; both modes are fairly simple to use
 
-**CMake integration**: Unity is more geared towards Meson, but the project includes `CMakeLists.txt` scripts as well, and there are some instructions on how to include it as a simple source file.
+**CMake integration**: the project includes `CMakeLists.txt` scripts as well, and there are some instructions on how to include it as a simple source file.
 
 ```CMake
-# simply add required source files
-#    add_library(unity STATIC Unity/src/unity.c)
-#    target_include_directories(unity PUBLIC Unity/src)
-#    add_library(unity_fixture STATIC Unity/extras/fixture/src/unity_fixture.c)
-#    target_include_directories(unity_fixture PUBLIC Unity/extras/fixture/src)
-
-# or use included CMakeLists.txt
-    set(UNITY_EXTENSION_FIXTURE yes)
+    set(UNITY_EXTENSION_FIXTURE yes CACHE BOOL "compile unity with fixtures extension")
 
     add_subdirectory(unity)
 ```
