@@ -30,4 +30,5 @@ void test_identity_should_fail( void )
 
 CUNIT_CI_RUN( "cunit_single_suite",
     CUNIT_CI_TEST( test_identity_should_pass ),
-    CUNIT_CI_TEST( test_identity_should_fail ) );
+    CUNIT_CI_TEST( test_identity_should_fail )
+);

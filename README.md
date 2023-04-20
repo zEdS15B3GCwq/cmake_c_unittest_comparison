@@ -37,9 +37,9 @@ This is, obviously, a work in progress.
 
 **Popularity**: mentioned in multiple forum discussions; it's a well known and mature library, I guess
 
-**Documentation**: pre-fork CUnit has detailed docs, the new fork's docs don't go much beyond simple usage with the new CUnitCI API.
+**Documentation**: pre-fork CUnit has detailed docs; the new fork's docs don't go much beyond simple usage with the new CUnitCI API.
 
-**Ease of use**: easy; new CUnitCI macros are easy to learn and use for simple use cases; pre-fork API is more complex
+**Ease of use**: new CUnitCI macros are easy to learn and use for simple use cases; pre-fork API can do much more but is quite complex in return.
 
 **CMake integration**: very easy, project comes with own CMakeFile.txt; no special build dependencies
 
@@ -50,24 +50,32 @@ This is, obviously, a work in progress.
     add_subdirectory(cunit/CUnit)
 ```
 
-**Features**: sufficient; fairly good organisation of tests (suites, registry), not so versatile in terms of smart asserts
+**General Features**: sufficient; fairly good organisation of tests (suites, registry), not so versatile in terms of smart asserts
 
 - [x] tests can be organised into suites, which can added to a registry to be run together
 - [x] each suite can have their own suite-level and pre-test setup / teardown functions
 - [x] test context shared via global variables
 - [x] easy to use with one executable / test code file  (see [single_suite](tests/cunit/single_suite/) example)
 - [x] multiple tests / suites can be linked into one executable (though this isn't well documented, see [multi_suite](tests/cunit/multi_suite/) example);
-- [x] failed tests show executed code
-- [x] distinguishes between fatal and non-fatal assertions, allowing multiple asserts in one test (however, only the last failure is reported - see comments on output)
-- [x] JUnit XML output
-- [ ] cannot include custom messages in failed test output (unless using `condition && "message"` in assert)
-- [ ] variable values not shown in failed tests
 - [ ] no direct support for mocking
-- [ ] limited selection of assertions, only TRUE/FALSE/EQUAL, PTR, (N)STRING, DOUBLE variants
-- [ ] no array-capable assertions
 - [ ] no individual test timing
 
+**Asserts**:
+
+- [x] distinguishes between fatal and non-fatal assertions, allowing multiple asserts in one test (however, only the last failure is reported on the command line - see comments on output)
+- [ ] limited [selection of asserts](https://cunit.sourceforge.net/doc/writing_tests.html)
+- [ ] no array-capable assertions
+
+ASSERT, TRUE/FALSE, PASS/FAIL, [ - | PTR | STRING | NSTRING | DOUBLE ] [NOT] EQUAL
+
+all (except PASS) have _FATAL and non-fatal variants
+
 **Output**: terminal + JUnit XML
+
+- [x] JUnit XML output
+- [x] show executed code for failed tests
+- [ ] cannot include custom messages in failed test output (unless using a trick like `condition && "message"` in assert)
+- [ ] variable values not shown in failed tests
 
 ![CUnit test result output](images/results_cunit.png)
 
@@ -119,7 +127,7 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 
 **Popularity**: many mentions, seems to be popular
 
-**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the 2nd example - OK, it's not meant to be the main way to use Unity, but it's there. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
+**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the [2nd example](https://github.com/ThrowTheSwitch/Unity/tree/master/examples/example_2). OK, it may not meant to be the main way to use Unity, but it's there. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
 
 **Ease of use**: easy; there's a "general" mode that suits 1 exe / code file, and a "test group" functionality; both modes are fairly simple to use
 
@@ -131,7 +139,7 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
     add_subdirectory(unity)
 ```
 
-**Features**:
+**General Features**:
 
 - [x] general usage of one test executable / file
 - [x] `setUp` and `tearDown` functions run before each test; context shared via global variables
@@ -139,6 +147,8 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 - [x] large variety of asserts, including _ARRAY, _EACH_EQUAL, comparisons and float/double types
 - [x] all asserts come with _MESSAGE variant to display custom message
 - [x]
+
+**Asserts**:
 
 **Output**:
 
@@ -165,9 +175,11 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 
 **CMake integration**:
 
-**Features**:
+**General Features**:
 
 - [ ] feature
+
+**Asserts**:
 
 **Output**:
 
