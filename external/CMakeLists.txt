@@ -1,6 +1,7 @@
 if(TARGET_GROUP STREQUAL test_unity)
 
-    set(UNITY_EXTENSION_FIXTURE yes CACHE BOOL "compile unity with fixtures extension")
+    set(UNITY_EXTENSION_FIXTURE yes CACHE BOOL "compile with fixtures extension")
+    # set(UNITY_EXTENSION_MEMORY no CACHE BOOL "do not use memory addon")
 
     add_subdirectory(unity)
 

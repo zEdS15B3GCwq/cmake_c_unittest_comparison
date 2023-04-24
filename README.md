@@ -31,11 +31,9 @@ This is, obviously, a work in progress.
 - fork repo: <https://gitlab.com/cunity/cunit/-/tree/master/>
 - original home: <https://cunit.sourceforge.net/example.html>
 
-**Maintainers**: single developer
+**Activity and Maintainers**: single developer; repo inactive; besides a recent version bump, last commit was >1 year ago.
 
-**Activity**: inactive; besides a recent version bump, last commit was >1 year ago.
-
-**Popularity**: mentioned in multiple forum discussions; it's a well known and mature library, I guess
+**Popularity**: mentioned in multiple forum discussions; it's a well known and mature library, I guess.
 
 **Documentation**: pre-fork CUnit has detailed docs; the new fork's docs don't go much beyond simple usage with the new CUnitCI API.
 
@@ -57,7 +55,7 @@ This is, obviously, a work in progress.
 - [x] test context shared via global variables
 - [x] easy to use with one executable / test code file  (see [single_suite](tests/cunit/single_suite/) example)
 - [x] multiple tests / suites can be linked into one executable (though this isn't well documented, see [multi_suite](tests/cunit/multi_suite/) example);
-- [ ] no direct support for mocking
+- [ ] no mocking
 - [ ] no individual test timing
 
 **Asserts**:
@@ -82,7 +80,6 @@ all (except PASS) have _FATAL and non-fatal variants
 In my opinion, the output is well organised and it's easy to understand what failed. It's good that the failing code is shown. This type of static output isn't suitable for some things, though. For example, when looping over an array and testing each element with an assert, how to show which element is incorrect? Unity has asserts for comparing arrays, and shows the index and value of the incorrect element.
 
 In case of multiple failing assertions in one test, only the last one's code is reported to the command line: only `CU_ASSERT_EQUAL( 99, identity( a ) )` is shown for `single_suite` above. However,the summary also indicates the correct number and the XML output for `single_suite` shows both failed asserts:
-
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -121,15 +118,13 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 - home: <http://www.throwtheswitch.org/unity>
 - repo: <https://github.com/ThrowTheSwitch/Unity>
 
-**Maintainers**: 100+ contributors; only 1 contributor has committed code in 2023
-
-**Activity**: the last bugfix release was in 2021 Jan; last feature release in 2019 Oct; main maintainer [claims](https://groups.google.com/g/throwtheswitch/c/JKg9GgdeYHw) that development is active and going mostly in the direction of Ceedling and such, and the forums are pretty active too.
+**Activity and Maintainers**: 100+ contributors, though only 1 contributor has committed code in 2023 (as of April 2023). The last bugfix release was in 2021 Jan; last feature release in 2019 Oct; main maintainer [claims](https://groups.google.com/g/throwtheswitch/c/JKg9GgdeYHw) that development is active and going mostly in the direction of Ceedling and such, and the forums are pretty active too.
 
 **Popularity**: many mentions, seems to be popular
 
-**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the [2nd example](https://github.com/ThrowTheSwitch/Unity/tree/master/examples/example_2). OK, it may not meant to be the main way to use Unity, but it's there. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
+**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the [2nd example](https://github.com/ThrowTheSwitch/Unity/tree/master/examples/example_2). While it may not meant to be the main way to use Unity, but it's there and not well documented. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
 
-**Ease of use**: easy; there's a "general" mode that suits 1 exe / code file, and a "test group" functionality; both modes are fairly simple to use
+**Ease of use**: easy; there's a "general" mode that suits 1 exe / code file, and a "test group" functionality; both modes are fairly simple to use. On the other hand, a lot of additional functionality is provided by _Ruby_ scripts (e.g. test generators), which is unfortunate as I don't want to use _Ruby_.
 
 **CMake integration**: the project includes `CMakeLists.txt` scripts as well, and there are some instructions on how to include it as a simple source file.
 
@@ -144,11 +139,15 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 - [x] general usage of one test executable / file
 - [x] `setUp` and `tearDown` functions run before each test; context shared via global variables
 - [x] `unity_fixtures` can handle test groups; enables collecting tests from multiple files, and group-specific setup/teardown functions
-- [x] large variety of asserts, including _ARRAY, _EACH_EQUAL, comparisons and float/double types
-- [x] all asserts come with _MESSAGE variant to display custom message
-- [x]
+- [ ] no mocking, but CMock from same developer is recommended; uses Ruby scripts, though
 
-**Asserts**:
+**Asserts**: [list](https://github.com/ThrowTheSwitch/Unity/blob/master/docs/UnityAssertionsReference.md)
+
+- [x] large variety of type-specific asserts (TRUE/FALSE, NULL, INT*, UINT*, HEX*, FLOAT, DOUBLE)
+- [x] _ARRAY and _EACH_EQUAL variants to compare arrays
+- [x] _MESSAGE variants to display custom message
+- [x] [NOT] WITHIN, LESS / GREATER, NEG variants for bounds checking
+- [x] BITS for bitmasks
 
 **Output**:
 

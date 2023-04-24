@@ -1,33 +1,30 @@
-#include "CUnit/CUnitCI.h"
+#include "unity.h"
+#include "unity_fixture.h"
 #include "utils.h"
-#include "multi_suite_a.h"
+
+TEST_GROUP(multi_suite_a)
 
 int a = 0;
 
-CU_SUITE_SETUP() {
+TEST_SETUP(multi_suite_a) {
     a = 2;
-    return CUE_SUCCESS;
 }
 
-CU_SUITE_TEARDOWN() {
-    CU_ASSERT( a == 2 );
-    a = 0;
-    return CUE_SUCCESS;
+TEST_TEAR_DOWN(multi_suite_a) {
 }
 
-static void test_a_identity_should_pass( void )
+TEST(multi_suite_a, test_a_identity_should_pass)
 {
-    CU_ASSERT( 2 == identity( a ) );
+    TEST_ASSERT_TRUE( 2 == identity( a ) );
 }
 
-static void test_a_identity_should_fail( void )
+TEST(multi_suite_a, test_a_identity_should_fail)
 {
-    CU_ASSERT( 0 == identity( a ) );
+    TEST_ASSERT_TRUE( 0 == identity( a ) );
 }
 
-void register_suite_a( void )
+TEST_GROUP_RUNNER(multi_suite_a)
 {
-    CU_CI_DEFINE_SUITE( "multi suite a", __cu_suite_setup, __cu_suite_teardown, NULL, NULL );
-	CUNIT_CI_TEST( test_a_identity_should_pass );
-	CUNIT_CI_TEST( test_a_identity_should_fail );
+    RUN_TEST_CASE(multi_suite_a, test_a_identity_should_pass);
+    RUN_TEST_CASE(multi_suite_a, test_a_identity_should_fail);
 }

@@ -16,6 +16,7 @@ elseif(TARGET_PREFIX STREQUAL test_)
     if(TARGET_GROUP STREQUAL test_unity)
         message(STATUS "Target = Unity tests")
         # add_compile_definitions(UNITY_INCLUDE_EXEC_TIME UNITY_USE_COMMAND_LINE_ARGS)
+        # add_compile_definitions(UNITY_FIXTURE_NO_EXTRAS)
         add_subdirectory(external)
         add_subdirectory(tests/unity)
 

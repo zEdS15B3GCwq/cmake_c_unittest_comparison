@@ -1,21 +1,22 @@
-#include "CUnit/CUnitCI.h"
+#include "unity.h"
+#include "unity_fixture.h"
 #include "utils.h"
-#include "multi_suite_b.h"
 
-static void test_b_identity_should_pass( void )
+TEST_GROUP(multi_suite_b)
+
+TEST(multi_suite_b, test_b_identity_should_pass)
 {
-    CU_ASSERT( 40 == identity( 40 ) );
+    TEST_ASSERT_EQUAL_INT( 40, identity( 40 ) );
 }
 
-static void test_b_identity_should_fail( void )
+TEST(multi_suite_b, test_b_identity_should_fail)
 {
-    CU_ASSERT( 2 == identity( 2 ) );
-    CU_ASSERT( 2 == identity( 1 ) );
+    TEST_ASSERT_EQUAL_INT( 2, identity( 2 ) );
+    TEST_ASSERT_EQUAL_INT( 2, identity( 1 ) );
 }
 
-void register_suite_b( void )
+TEST_GROUP_RUNNER(multi_suite_b)
 {
-    CU_CI_DEFINE_SUITE( "multi suite b", NULL, NULL, NULL, NULL );
-	CUNIT_CI_TEST( test_b_identity_should_pass );
-	CUNIT_CI_TEST( test_b_identity_should_fail );
+    RUN_TEST_CASE(multi_suite_b, test_b_identity_should_pass);
+    RUN_TEST_CASE(multi_suite_b, test_b_identity_should_fail);
 }

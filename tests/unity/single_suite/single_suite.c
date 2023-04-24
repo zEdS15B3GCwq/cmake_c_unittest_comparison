@@ -6,6 +6,9 @@
 
 #include "utils.h"
 
+#define TEST_ASSERT_EQUAL_INT_M( a, b ) TEST_ASSERT_EQUAL_INT_MESSAGE( (a), (b), #a " == " #b )
+#define TEST_ASSERT_EQUAL_INT_MESSAGE_M( a, b, m ) TEST_ASSERT_EQUAL_INT_MESSAGE( (a), (b), #a " == " #b " | message: " m  )
+
 int a = 0;
 int b[5];
 float c[5];
@@ -37,7 +40,8 @@ void test_identity_should_fail( void )
 // repeats the skipped test from above
 void test_identity_should_fail_again( void )
 {
-    TEST_ASSERT_EQUAL_INT_MESSAGE( 99, identity( a ), "a is still 1 not 99" );
+//    TEST_ASSERT_EQUAL_INT_MESSAGE( 99, identity( a ), "a is still 1 not 99" );
+    TEST_ASSERT_EQUAL_INT_MESSAGE_M( 99, identity( a ), "a is still 1 not 99" );
 }
 
 void test_various_asserts_some_should_fail( void )
