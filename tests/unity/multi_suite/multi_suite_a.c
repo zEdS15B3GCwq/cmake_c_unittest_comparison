@@ -2,7 +2,7 @@
 #include "unity_fixture.h"
 #include "utils.h"
 
-TEST_GROUP(multi_suite_a)
+TEST_GROUP(multi_suite_a);
 
 int a = 0;
 
@@ -15,6 +15,7 @@ TEST_TEAR_DOWN(multi_suite_a) {
 
 TEST(multi_suite_a, test_a_identity_should_pass)
 {
+    TEST_ASSERT_EQUAL_INT(2, a);
     TEST_ASSERT_TRUE( 2 == identity( a ) );
 }
 

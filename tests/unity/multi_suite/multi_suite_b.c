@@ -2,7 +2,11 @@
 #include "unity_fixture.h"
 #include "utils.h"
 
-TEST_GROUP(multi_suite_b)
+TEST_GROUP(multi_suite_b);
+
+TEST_SETUP(multi_suite_b) {}
+
+TEST_TEAR_DOWN(multi_suite_b) {}
 
 TEST(multi_suite_b, test_b_identity_should_pass)
 {
