@@ -122,9 +122,9 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 
 **Popularity**: many mentions, seems to be popular
 
-**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the [2nd example](https://github.com/ThrowTheSwitch/Unity/tree/master/examples/example_2). While it may not meant to be the main way to use Unity, but it's there and not well documented. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
+**Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the [2nd example](https://github.com/ThrowTheSwitch/Unity/tree/master/examples/example_2). While it may not meant to be the main way to use Unity, it should be better documented if it exists. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
 
-**Ease of use**: easy; there's a "general" mode that suits 1 exe / code file, and a "test group" functionality; both modes are fairly simple to use. On the other hand, a lot of additional functionality is provided by _Ruby_ scripts (e.g. test generators), which is unfortunate as I don't want to use _Ruby_.
+**Ease of use**: easy; there's a "general" mode that suits 1 exe / code file, and a "fixture" mode with test group functionality; both modes are fairly simple to use... with exceptions in the latter due to lack of docs. On the other hand, a lot of additional functionality is provided by _Ruby_ scripts (e.g. test generators), which is unfortunate as I don't want to use _Ruby_.
 
 **CMake integration**: the project includes `CMakeLists.txt` scripts as well, and there are some instructions on how to include it as a simple source file.
 
@@ -133,6 +133,8 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 
     add_subdirectory(unity)
 ```
+
+Got a lot of warnings, though, when I actually included `unit_fixture` in the build.
 
 **General Features**:
 
@@ -144,16 +146,26 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 **Asserts**: [list](https://github.com/ThrowTheSwitch/Unity/blob/master/docs/UnityAssertionsReference.md)
 
 - [x] large variety of type-specific asserts (TRUE/FALSE, NULL, INT*, UINT*, HEX*, FLOAT, DOUBLE)
-- [x] _ARRAY and _EACH_EQUAL variants to compare arrays
-- [x] _MESSAGE variants to display custom message
+- [x] `_ARRAY` and `_EACH_EQUAL` variants to compare arrays
+- [x] `_MESSAGE` variants to display custom message
 - [x] [NOT] WITHIN, LESS / GREATER, NEG variants for bounds checking
 - [x] BITS for bitmasks
 
 **Output**:
 
-![aaa]()
+- [ ] only command-line output
+- [ ] doesn't show executed code for failed tests
+- [x] can include custom messages in output (`_MESSAGE` variants)
+- [x] variable values shown in specific tests
+- [ ] inconsistent output between `unity` and `unity_fixture`
 
-**Issues**:
+![Unity test result output](images/results_unity.png)
+
+In my opinion, output from Unity is in some ways better, in other ways less informative than CUnit's. It's good that custom messages can be included, and that, for specific tests, actual values are shown (i.e. `2` instead of `identity (a)`), however, these outputs lack context without at least showing the executed code inside the assert. For example, `Expected TRUE was FALSE` (see `multi_suite_a/test_a_identity_should_fail`) is useless information unless a custom message is included or one looks up the failing source code. Having to add meaningful custom messages to _each_ test isn't ideal. At least showing the code would help a bit. This is actually possible with custom macros that add a text version of the code (`#code`) to the custom message (see `TEST_ASSERT_EQUAL_INT_M` and `TEST_ASSERT_EQUAL_INT_MESSAGE_M` in `single_suite.c`) but, again, this requires extra work. Related Ruby scripts might offer better output, but I don't want to use Ruby.
+
+I also find CUnit's output easier to read. For example, it only shows the full path to the source file for failing tests. Passing tests are only listed by test name. And as mentioned, the XML output from CUnit includes all the failing asserts within a test, so it's possible (even if not always practical) to have several non-fatal asserts in one test. That doesn't work with Unity (see `..._again` tests to actually get those tests to execute).
+
+Furthermore, the output is not consistent between `unity` and `unity_fixture`. The latter only listed failing tests; passing tests were not shown (e.g. `test_a_identity_should_pass`), whereas the former listed the passing test as well. Maybe there's a setting somewhere? I didn't see that in the docs.
 
 ### Template
 
