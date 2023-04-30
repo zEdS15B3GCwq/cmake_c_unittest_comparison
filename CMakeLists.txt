@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.20)
 project("unittest comparison" C)
 
 set(TARGET_GROUP production CACHE STRING "Group to build")
@@ -29,6 +29,10 @@ elseif(TARGET_PREFIX STREQUAL test_)
         message(STATUS "Target = libcester tests")
         add_subdirectory(external)
         add_subdirectory(tests/libcester)
+
+    elseif(TARGET_GROUP STREQUAL test_glib)
+        message(STATUS "Target = glib tests")
+        add_subdirectory(tests/glib)
 
     else()
         message(FATAL_ERROR "Unknown test group specified in TARGET_GROUP")
