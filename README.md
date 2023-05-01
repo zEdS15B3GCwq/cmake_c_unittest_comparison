@@ -4,7 +4,7 @@ Comparison of C language unit testing frameworks with CMake (CUnit, Unity, cmock
 
 ## 1. Purpose
 
-I'm on the search for a simple unit testing framework for pure C. Some frameworks are more popular and are mentioned in many forum discussions, such as Unity / Ceedling, CUnit, cmocka, but there are plenty other less known ones that could be just as good. I'm looking for one that has informative output, is easy to build / integrate, is easy to learn (no lengthy documentation), and is actively maintained and can be expected to be around for a while (good history, adaptation, number of maintainers). It's all going to be quite superficial, first-impressions level, because I don't want to waste a lot of time getting to know a complex system.
+I'm on the search for a simple unit testing framework for pure C. Some frameworks are more popular and are mentioned in many forum discussions, such as Unity / Ceedling, CUnit, cmocka, but there are plenty other less known ones that could be just as good. I'm looking for one that has informative output, is easy to build / integrate, is easy to learn (no lengthy documentation), and is actively maintained and can be expected to be around for a while (good history, adaptation, number of maintainers). It's all going to be quite superficial, first-impressions level, because I want to have a good idea which system is worth investing more energy into before digging any deeper. Right now, mocking is not yet in my focus, so that will not be considered.
 
 C++ frameworks are excluded (google test, boost test, cppunit and alike) even if they're supposed to work well with C. No mixed code for me.
 
@@ -55,7 +55,6 @@ This is, obviously, a work in progress.
 - [x] test context shared via global variables
 - [x] easy to use with one executable / test code file  (see [single_suite](tests/cunit/single_suite/) example)
 - [x] multiple tests / suites can be linked into one executable (though this isn't well documented, see [multi_suite](tests/cunit/multi_suite/) example);
-- [ ] no mocking
 - [ ] no individual test timing
 
 **Asserts**:
@@ -141,7 +140,6 @@ Got a lot of warnings, though, when I actually included `unit_fixture` in the bu
 - [x] general usage of one test executable / file
 - [x] `setUp` and `tearDown` functions run before each test; context shared via global variables
 - [x] `unity_fixtures` can handle test groups; enables collecting tests from multiple files, and group-specific setup/teardown functions
-- [ ] no mocking, but CMock from same developer is recommended; uses Ruby scripts, though
 
 **Asserts**: [list](https://github.com/ThrowTheSwitch/Unity/blob/master/docs/UnityAssertionsReference.md)
 
@@ -166,34 +164,3 @@ In my opinion, output from Unity is in some ways better, in other ways less info
 I also find CUnit's output easier to read. For example, it only shows the full path to the source file for failing tests. Passing tests are only listed by test name. And as mentioned, the XML output from CUnit includes all the failing asserts within a test, so it's possible (even if not always practical) to have several non-fatal asserts in one test. That doesn't work with Unity (see `..._again` tests to actually get those tests to execute).
 
 Furthermore, the output is not consistent between `unity` and `unity_fixture`. The latter only listed failing tests; passing tests were not shown (e.g. `test_a_identity_should_pass`), whereas the former listed the passing test as well. Maybe there's a setting somewhere? I didn't see that in the docs.
-
-### Template
-
-**Websites**:
-
-- home: <url>
-- repo: <url>
-
-**Maintainers**:
-
-**Activity**:
-
-**Popularity**:
-
-**Documentation**:
-
-**Ease of use**:
-
-**CMake integration**:
-
-**General Features**:
-
-- [ ] feature
-
-**Asserts**:
-
-**Output**:
-
-![image]()
-
-**Issues**:
