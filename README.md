@@ -4,9 +4,13 @@ Comparison of C language unit testing frameworks with CMake (CUnit, Unity, cmock
 
 ## 1. Purpose
 
-I'm on the search for a simple unit testing framework for pure C. Some frameworks are more popular and are mentioned in many forum discussions, such as Unity / Ceedling, CUnit, cmocka, but there are plenty other less known ones that could be just as good. I'm looking for one that has informative output, is easy to build / integrate, is easy to learn (no lengthy documentation), and is actively maintained and can be expected to be around for a while (good history, adaptation, number of maintainers). It's all going to be quite superficial, first-impressions level, because I want to have a good idea which system is worth investing more energy into before digging any deeper. Right now, mocking is not yet in my focus, so that will not be considered.
+I'm on the search for a simple unit testing framework for pure C. Some frameworks are more popular and are mentioned in many forum discussions, such as Unity / Ceedling, CUnit, cmocka, but there are plenty other less known ones that could be just as good. I'm looking for one that has informative output, is easy to build / integrate, is easy to learn (no lengthy documentation), and is actively maintained and can be expected to be around for a while (good history, adaptation, number of maintainers). It's all going to be quite superficial, first-impressions level, because I want to have a good idea which system is worth investing more energy into before digging any deeper.
+
+Right now, mocking is not yet in my focus, so that will not be considered.
 
 C++ frameworks are excluded (google test, boost test, cppunit and alike) even if they're supposed to work well with C. No mixed code for me.
+
+Tests are mostly run via CMake's `ctest` utility. I'm sure there are advantages running tests in other ways, e.g. more integrated into IDEs, but for now I prefer this simple command-line approach.
 
 This is, obviously, a work in progress.
 
