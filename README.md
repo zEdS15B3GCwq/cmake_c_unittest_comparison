@@ -167,12 +167,12 @@ I also find CUnit's output easier to read. For example, it only shows the full p
 
 Furthermore, the output is not consistent between `unity` and `unity_fixture`. The latter only listed failing tests; passing tests were not shown (e.g. `test_a_identity_should_pass`), whereas the former listed the passing test as well. Maybe there's a setting somewhere? I didn't see that in the docs.
 
-### Template
+### GLib
 
 **Websites**:
 
-- home: <url>
-- repo: <url>
+- home: <https://docs.gtk.org/glib/testing.html>
+- repo: <https://gitlab.gnome.org/GNOME/glib>
 
 **Maintainers**:
 
@@ -187,6 +187,16 @@ Furthermore, the output is not consistent between `unity` and `unity_fixture`. T
 **CMake integration**:
 
 **General Features**:
+
+only string array comparison assert but can implement others using non-fatal asserts in loop
+optional non-fatal failures
+per-test setup/teardown with automatically allocated custom struct
+tests can optionally receive fixture and pointer to user data
+output duplicates errors on stdout and stderr, can be too verbose; it may not be possible to redirect one when using CTest
+tests organised hierarchically with path string (e.g. `/suite_1/test_1`), easy to group
+has _trap_ functionality for running tests that may not return in another process
+multiple ways of adding tests with multiple levels of detail defined, practical option, can be combined easily
+needs glib (on windows, easiest for me was installing gstreamer)
 
 - [ ] feature
 
