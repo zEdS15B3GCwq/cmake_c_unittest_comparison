@@ -21,4 +21,4 @@ cmake_path(APPEND GLIB_LIB_DIR "glib-2.0" "include" OUTPUT_VARIABLE incl2)
 include_directories("${incl1}" "${incl2}")
 
 add_subdirectory(single_suite)
-#add_subdirectory(multi_suite)
+add_subdirectory(multi_suite)
