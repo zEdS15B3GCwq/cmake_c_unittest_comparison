@@ -83,5 +83,5 @@ main (int argc, char *argv[])
     const char *expected[] = { "one", "two", "three", NULL };
     g_test_add_data_func( "/single_suite/str_array_fail", expected, test_string_array_should_fail );
 
-    return g_test_run ();
+    return g_test_run();
 }

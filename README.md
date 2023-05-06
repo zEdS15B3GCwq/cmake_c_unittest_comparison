@@ -174,17 +174,15 @@ Furthermore, the output is not consistent between `unity` and `unity_fixture`. T
 - home: <https://docs.gtk.org/glib/testing.html>
 - repo: <https://gitlab.gnome.org/GNOME/glib>
 
-**Maintainers**:
+**Activity and Maintainers**: active
 
-**Activity**:
+**Popularity**: GLib itself is well known, haven't found too many mentions of the test module itself, though.
 
-**Popularity**:
+**Documentation**: pretty good, same as GLib
 
-**Documentation**:
+**Ease of use**: depends - it's easy to create and register tests, set up fixtures. On the other hand, I wasn't able to get subprocess _traps_ to work on Windows. First it errored out telling me that some kind of _helper_ was missing, then when I supplied `gspawn-win64-helper.exe` and `gspawn-win64-helper.exe`, it threw an error that it couldn't read from the subprocess's pipe. The _helper_ isn't mentioned in the docs, and there isn't much about it in forums either. I gave up and commented `test_trap_failure_and_stdout` out.
 
-**Ease of use**:
-
-**CMake integration**:
+**CMake integration**: More complex than the previous frameworks, definitely. First of all, on Windows, it's not trivial to get GLib **without** building it inside the likes of `MSYS2` and without `pkg-config`, both of which I decided not to install in the name of simplicity. Luckily, I use `Gstreamer` anyway, which includes compiled GLib libraries. I was also able to get `gspawn-win64-helper.exe` required for _traps_ from a Gimp installation; in the end, however, that didn't help either. So, if you already have Gstreamer, integrating GLib tests isn't that difficult. The CMake commands were not very complex: instead of configuring with `pkg-config`, the include and lib directories were added manually.
 
 **General Features**:
 
@@ -204,6 +202,6 @@ needs glib (on windows, easiest for me was installing gstreamer)
 
 **Output**:
 
-![image]()
+![GLib test result output](images/results_glib.png)
 
 **Issues**:
