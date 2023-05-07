@@ -16,14 +16,13 @@ This is, obviously, a work in progress.
 
 ## 2. List of Candidates
 
-1. [GLib testing framework](https://docs.gtk.org/glib/testing.html)
-2. [cmocka](https://cmocka.org/)
-3. [µnit (munit)](https://nemequ.github.io/munit/)
-4. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
-5. [Cgreen](https://github.com/cgreen-devs/cgreen)
-6. [Criterion](https://github.com/Snaipe/Criterion/)
-7. [tau](https://github.com/jasmcaus/tau/)
-8. [libcester](https://github.com/exoticlibraries/libcester)
+1. [cmocka](https://cmocka.org/)
+2. [µnit (munit)](https://nemequ.github.io/munit/)
+3. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
+4. [Cgreen](https://github.com/cgreen-devs/cgreen)
+5. [Criterion](https://github.com/Snaipe/Criterion/)
+6. [tau](https://github.com/jasmcaus/tau/)
+7. [libcester](https://github.com/exoticlibraries/libcester)
 
 ## 3. Impressions
 
@@ -164,3 +163,53 @@ In my opinion, output from Unity is in some ways better, in other ways less info
 I also find CUnit's output easier to read. For example, it only shows the full path to the source file for failing tests. Passing tests are only listed by test name. And as mentioned, the XML output from CUnit includes all the failing asserts within a test, so it's possible (even if not always practical) to have several non-fatal asserts in one test. That doesn't work with Unity (see `..._again` tests to actually get those tests to execute).
 
 Furthermore, the output is not consistent between `unity` and `unity_fixture`. The latter only listed failing tests; passing tests were not shown (e.g. `test_a_identity_should_pass`), whereas the former listed the passing test as well. Maybe there's a setting somewhere? I didn't see that in the docs.
+
+### GLib
+
+**Websites**:
+
+- home: <https://docs.gtk.org/glib/testing.html>
+- repo: <https://gitlab.gnome.org/GNOME/glib>
+
+**Activity and Maintainers**: active; GLib has a big community
+
+**Documentation**: pretty good, same as GLib
+
+**Ease of use**: depends - it's easy to create and register tests, set up fixtures. On the other hand, I wasn't able to get subprocess _traps_ to work on Windows. First it errored out telling me that some kind of _helper_ was missing, of which I found no mentions in the docs whatsoever. Digged up some related topics online that hinted at the existence of a helper executable on Windows. I was able to acquire `gspawn-win64-helper.exe` and `gspawn-win64-helper.exe` from a Gimp installation, but even with those present the test threw an error that it couldn't read from the subprocess's pipe. Again, not much information online how to solve that. I assume that a proper installation (build) of GLib would not have this issue(?), but I'd decided not to bother with that so I gave up and commented `test_trap_failure_and_stdout` out.
+
+**CMake integration**: More complex than Unity and CUnit, definitely. First of all, on Windows, it's not trivial to get GLib _without_ building it inside the likes of `MSYS2` and without `pkg-config`, both of which I decided not to install in the name of simplicity. Luckily, I use `Gstreamer` anyway, which includes compiled GLib libraries, at least enough for basic functionality. As mentioned above, I wasn't able to get subprocess _traps_ to work, even with a _helper_ executable copied from a Gimp installation. While GLib doesn't provide documentation for CMake (only Meson and Autotools), it wasn't very difficult to set CMake up: instead of configuring with `pkg-config`, though, include and lib directories were added manually.
+
+**General Features**:
+
+- [x] test hierarchy is defined with a "path" (e.g. "/suite_a/test_group_a/test_a"), which allows easy and clear organisation
+- [x] grouping tests into suites, groups using paths is part of basic functionality, nothing special required for multi-suite tests
+- [x] unlike Unity and CUnit, fixtures are not global variables but dynamically allocated types set up and torn down for each test; GLib takes care of allocation and freeing
+- [x] tests can receive fixture data and "global" user data
+- [x] multiple test registration functions covering different levels of complexity (no data, only user data, user data with cleanup, full with fixture and user data)
+- [x] _trap_ functionality to run tests that can abort / not return in a subprocess; I couldn't get this to work, though!
+- [x] extras: bug URI association, timer, teardown queue, test summary, log handling, etc.
+
+**Asserts**:
+
+- [x] failures can be non-fatal optionally (per executable option)
+- [x] standard set of type-specific asserts (TRUE/FALSE, NULL, float, (u)int, hex, str)
+- [x] some GLib-specific asserts (error, variant)
+- [x] assert for comparison of NULL-terminated string arrays
+- [x] memory comparison
+- [ ] no other array types supported
+- [ ] no range checking assert variants
+- [ ] no asserts for bit masks
+
+**Output**:
+
+- [x] shows executed code for failed tests
+- [x] variable values shown in specific tests
+- [ ] no custom messages for failed asserts
+- [x] bug URI and test summary messages (always shown)
+- [x] custom messages possible with `g_test_fail_printf` and `g_test_incomplete_printf`, but these don't coordinate with the asserts; in fact, the messages aren't displayed in the same test that has failing asserts (see `test_func_only_multi_fail` in [single_suite.c](tests/glib/single_suite/single_suite.c))
+
+![GLib test result output](images/results_glib.png)
+
+The output's structure is, in my opinion, sub-optimal. I'm happy with the information shown, however, the `ok` or `not ok` lines, and test boundaries in general are difficult to spot, as one's attention is overwhelmed by the long and duplicated error lines. The duplication is due to those lines being sent to both stdout and stderr. While it's possible to reduce the clutter by redirecting one, I'm not sure how to do that with CTest, so the clutter remains.
+
+GLib Test is a versatile, easy-to-use test framework, which, compared to Unity and CUnit seems to have the best feature set. On the other hand, it's not as easy to build/integrate, unless you're already using GLib for the project.
