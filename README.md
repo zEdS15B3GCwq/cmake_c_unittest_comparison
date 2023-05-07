@@ -37,8 +37,6 @@ This is, obviously, a work in progress.
 
 **Activity and Maintainers**: single developer; repo inactive; besides a recent version bump, last commit was >1 year ago.
 
-**Popularity**: mentioned in multiple forum discussions; it's a well known and mature library, I guess.
-
 **Documentation**: pre-fork CUnit has detailed docs; the new fork's docs don't go much beyond simple usage with the new CUnitCI API.
 
 **Ease of use**: new CUnitCI macros are easy to learn and use for simple use cases; pre-fork API can do much more but is quite complex in return.
@@ -122,8 +120,6 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 - repo: <https://github.com/ThrowTheSwitch/Unity>
 
 **Activity and Maintainers**: 100+ contributors, though only 1 contributor has committed code in 2023 (as of April 2023). The last bugfix release was in 2021 Jan; last feature release in 2019 Oct; main maintainer [claims](https://groups.google.com/g/throwtheswitch/c/JKg9GgdeYHw) that development is active and going mostly in the direction of Ceedling and such, and the forums are pretty active too.
-
-**Popularity**: many mentions, seems to be popular
 
 **Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the [2nd example](https://github.com/ThrowTheSwitch/Unity/tree/master/examples/example_2). While it may not meant to be the main way to use Unity, it should be better documented if it exists. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
 

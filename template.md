@@ -9,8 +9,6 @@
 
 **Activity**:
 
-**Popularity**:
-
 **Documentation**:
 
 **Ease of use**:
