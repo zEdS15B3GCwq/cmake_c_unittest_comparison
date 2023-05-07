@@ -12,14 +12,13 @@ This is, obviously, a work in progress.
 
 ## 2. List of Candidates
 
-1. [GLib testing framework](https://docs.gtk.org/glib/testing.html)
-2. [cmocka](https://cmocka.org/)
-3. [µnit (munit)](https://nemequ.github.io/munit/)
-4. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
-5. [Cgreen](https://github.com/cgreen-devs/cgreen)
-6. [Criterion](https://github.com/Snaipe/Criterion/)
-7. [tau](https://github.com/jasmcaus/tau/)
-8. [libcester](https://github.com/exoticlibraries/libcester)
+1. [cmocka](https://cmocka.org/)
+2. [µnit (munit)](https://nemequ.github.io/munit/)
+3. [ctest](https://github.com/bvdberg/ctest) (not the one included in CMake)
+4. [Cgreen](https://github.com/cgreen-devs/cgreen)
+5. [Criterion](https://github.com/Snaipe/Criterion/)
+6. [tau](https://github.com/jasmcaus/tau/)
+7. [libcester](https://github.com/exoticlibraries/libcester)
 
 ## 3. Impressions
 
@@ -32,8 +31,6 @@ This is, obviously, a work in progress.
 - original home: <https://cunit.sourceforge.net/example.html>
 
 **Activity and Maintainers**: single developer; repo inactive; besides a recent version bump, last commit was >1 year ago.
-
-**Popularity**: mentioned in multiple forum discussions; it's a well known and mature library, I guess.
 
 **Documentation**: pre-fork CUnit has detailed docs; the new fork's docs don't go much beyond simple usage with the new CUnitCI API.
 
@@ -55,7 +52,6 @@ This is, obviously, a work in progress.
 - [x] test context shared via global variables
 - [x] easy to use with one executable / test code file  (see [single_suite](tests/cunit/single_suite/) example)
 - [x] multiple tests / suites can be linked into one executable (though this isn't well documented, see [multi_suite](tests/cunit/multi_suite/) example);
-- [ ] no mocking
 - [ ] no individual test timing
 
 **Asserts**:
@@ -120,8 +116,6 @@ Condition: 'CU_ASSERT_EQUAL(99,identity( a ))'
 
 **Activity and Maintainers**: 100+ contributors, though only 1 contributor has committed code in 2023 (as of April 2023). The last bugfix release was in 2021 Jan; last feature release in 2019 Oct; main maintainer [claims](https://groups.google.com/g/throwtheswitch/c/JKg9GgdeYHw) that development is active and going mostly in the direction of Ceedling and such, and the forums are pretty active too.
 
-**Popularity**: many mentions, seems to be popular
-
 **Documentation**: the docs describe a simple use case and that part is easy to understand, easy to implement and integrate. However, there'a lot beyond that that's hidden in the code and examples. For example, the only references on `unity_fixtures` are comments in the source and the [2nd example](https://github.com/ThrowTheSwitch/Unity/tree/master/examples/example_2). While it may not meant to be the main way to use Unity, it should be better documented if it exists. Also, some configuration options that are documented and are supposed to change the output (e.g. `UNITY_OUTPUT_FOR_ECLIPSE`) don't seem to be doing anything.
 
 **Ease of use**: easy; there's a "general" mode that suits 1 exe / code file, and a "fixture" mode with test group functionality; both modes are fairly simple to use... with exceptions in the latter due to lack of docs. On the other hand, a lot of additional functionality is provided by _Ruby_ scripts (e.g. test generators), which is unfortunate as I don't want to use _Ruby_.
@@ -141,7 +135,6 @@ Got a lot of warnings, though, when I actually included `unit_fixture` in the bu
 - [x] general usage of one test executable / file
 - [x] `setUp` and `tearDown` functions run before each test; context shared via global variables
 - [x] `unity_fixtures` can handle test groups; enables collecting tests from multiple files, and group-specific setup/teardown functions
-- [ ] no mocking, but CMock from same developer is recommended; uses Ruby scripts, though
 
 **Asserts**: [list](https://github.com/ThrowTheSwitch/Unity/blob/master/docs/UnityAssertionsReference.md)
 
@@ -174,34 +167,45 @@ Furthermore, the output is not consistent between `unity` and `unity_fixture`. T
 - home: <https://docs.gtk.org/glib/testing.html>
 - repo: <https://gitlab.gnome.org/GNOME/glib>
 
-**Activity and Maintainers**: active
-
-**Popularity**: GLib itself is well known, haven't found too many mentions of the test module itself, though.
+**Activity and Maintainers**: active; GLib has a big community
 
 **Documentation**: pretty good, same as GLib
 
-**Ease of use**: depends - it's easy to create and register tests, set up fixtures. On the other hand, I wasn't able to get subprocess _traps_ to work on Windows. First it errored out telling me that some kind of _helper_ was missing, then when I supplied `gspawn-win64-helper.exe` and `gspawn-win64-helper.exe`, it threw an error that it couldn't read from the subprocess's pipe. The _helper_ isn't mentioned in the docs, and there isn't much about it in forums either. I gave up and commented `test_trap_failure_and_stdout` out.
+**Ease of use**: depends - it's easy to create and register tests, set up fixtures. On the other hand, I wasn't able to get subprocess _traps_ to work on Windows. First it errored out telling me that some kind of _helper_ was missing, of which I found no mentions in the docs whatsoever. Digged up some related topics online that hinted at the existence of a helper executable on Windows. I was able to acquire `gspawn-win64-helper.exe` and `gspawn-win64-helper.exe` from a Gimp installation, but even with those present the test threw an error that it couldn't read from the subprocess's pipe. Again, not much information online how to solve that. I assume that a proper installation (build) of GLib would not have this issue(?), but I'd decided not to bother with that so I gave up and commented `test_trap_failure_and_stdout` out.
 
-**CMake integration**: More complex than the previous frameworks, definitely. First of all, on Windows, it's not trivial to get GLib **without** building it inside the likes of `MSYS2` and without `pkg-config`, both of which I decided not to install in the name of simplicity. Luckily, I use `Gstreamer` anyway, which includes compiled GLib libraries. I was also able to get `gspawn-win64-helper.exe` required for _traps_ from a Gimp installation; in the end, however, that didn't help either. So, if you already have Gstreamer, integrating GLib tests isn't that difficult. The CMake commands were not very complex: instead of configuring with `pkg-config`, the include and lib directories were added manually.
+**CMake integration**: More complex than Unity and CUnit, definitely. First of all, on Windows, it's not trivial to get GLib _without_ building it inside the likes of `MSYS2` and without `pkg-config`, both of which I decided not to install in the name of simplicity. Luckily, I use `Gstreamer` anyway, which includes compiled GLib libraries, at least enough for basic functionality. As mentioned above, I wasn't able to get subprocess _traps_ to work, even with a _helper_ executable copied from a Gimp installation. While GLib doesn't provide documentation for CMake (only Meson and Autotools), it wasn't very difficult to set CMake up: instead of configuring with `pkg-config`, though, include and lib directories were added manually.
 
 **General Features**:
 
-only string array comparison assert but can implement others using non-fatal asserts in loop
-optional non-fatal failures
-per-test setup/teardown with automatically allocated custom struct
-tests can optionally receive fixture and pointer to user data
-output duplicates errors on stdout and stderr, can be too verbose; it may not be possible to redirect one when using CTest
-tests organised hierarchically with path string (e.g. `/suite_1/test_1`), easy to group
-has _trap_ functionality for running tests that may not return in another process
-multiple ways of adding tests with multiple levels of detail defined, practical option, can be combined easily
-needs glib (on windows, easiest for me was installing gstreamer)
-
-- [ ] feature
+- [x] test hierarchy is defined with a "path" (e.g. "/suite_a/test_group_a/test_a"), which allows easy and clear organisation
+- [x] grouping tests into suites, groups using paths is part of basic functionality, nothing special required for multi-suite tests
+- [x] unlike Unity and CUnit, fixtures are not global variables but dynamically allocated types set up and torn down for each test; GLib takes care of allocation and freeing
+- [x] tests can receive fixture data and "global" user data
+- [x] multiple test registration functions covering different levels of complexity (no data, only user data, user data with cleanup, full with fixture and user data)
+- [x] _trap_ functionality to run tests that can abort / not return in a subprocess; I couldn't get this to work, though!
+- [x] extras: bug URI association, timer, teardown queue, test summary, log handling, etc.
 
 **Asserts**:
 
+- [x] failures can be non-fatal optionally (per executable option)
+- [x] standard set of type-specific asserts (TRUE/FALSE, NULL, float, (u)int, hex, str)
+- [x] some GLib-specific asserts (error, variant)
+- [x] assert for comparison of NULL-terminated string arrays
+- [x] memory comparison
+- [ ] no other array types supported
+- [ ] no range checking assert variants
+- [ ] no asserts for bit masks
+
 **Output**:
+
+- [x] shows executed code for failed tests
+- [x] variable values shown in specific tests
+- [ ] no custom messages for failed asserts
+- [x] bug URI and test summary messages (always shown)
+- [x] custom messages possible with `g_test_fail_printf` and `g_test_incomplete_printf`, but these don't coordinate with the asserts; in fact, the messages aren't displayed in the same test that has failing asserts (see `test_func_only_multi_fail` in [single_suite.c](tests/glib/single_suite/single_suite.c))
 
 ![GLib test result output](images/results_glib.png)
 
-**Issues**:
+The output's structure is, in my opinion, sub-optimal. I'm happy with the information shown, however, the `ok` or `not ok` lines, and test boundaries in general are difficult to spot, as one's attention is overwhelmed by the long and duplicated error lines. The duplication is due to those lines being sent to both stdout and stderr. While it's possible to reduce the clutter by redirecting one, I'm not sure how to do that with CTest, so the clutter remains.
+
+GLib Test is a versatile, easy-to-use test framework, which, compared to Unity and CUnit seems to have the best feature set. On the other hand, it's not as easy to build/integrate, unless you're already using GLib for the project.

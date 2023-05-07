@@ -21,6 +21,8 @@ teardown( MyFixture *fixture, gconstpointer user_data )
 static void
 test_should_pass( MyFixture *fixture, gconstpointer user_data )
 {
+    g_test_summary("this test should pass");
+    g_test_bug("//test/should/pass");
     g_print("test_should_pass\n");
     g_assert_nonnull(fixture);
     g_assert_cmpint(fixture->a, ==, 1);
@@ -61,6 +63,8 @@ test_trap_failure_and_stdout( const int *user_data )
 static void
 test_string_array_should_fail( const char **expected )
 {
+    g_test_summary("this string array test will fail");
+    g_test_bug("//test/should/fail");
     const char *data[] = { "one", "too", "three", NULL };
     g_assert_cmpstrv( data, expected );
 }
