@@ -32,6 +32,7 @@ elseif(TARGET_PREFIX STREQUAL test_)
 
     elseif(TARGET_GROUP STREQUAL test_glib)
         message(STATUS "Target = glib tests")
+        add_subdirectory(external)
         add_subdirectory(tests/glib)
 
     else()

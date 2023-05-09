@@ -6,6 +6,6 @@ add_executable(multi_suite_main_app
 
 target_include_directories(multi_suite_main_app PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
-target_link_libraries(multi_suite_main_app utils)
+target_link_libraries(multi_suite_main_app GLib utils)
 
 add_test(multi_suite_test multi_suite_main_app)

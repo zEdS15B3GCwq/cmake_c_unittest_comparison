@@ -22,7 +22,6 @@ This is, obviously, a work in progress.
 4. [Cgreen](https://github.com/cgreen-devs/cgreen)
 5. [Criterion](https://github.com/Snaipe/Criterion/)
 6. [tau](https://github.com/jasmcaus/tau/)
-7. [libcester](https://github.com/exoticlibraries/libcester)
 
 ## 3. Impressions
 
@@ -177,14 +176,40 @@ Furthermore, the output is not consistent between `unity` and `unity_fixture`. T
 
 **Ease of use**: depends - it's easy to create and register tests, set up fixtures. On the other hand, I wasn't able to get subprocess _traps_ to work on Windows. First it errored out telling me that some kind of _helper_ was missing, of which I found no mentions in the docs whatsoever. Digged up some related topics online that hinted at the existence of a helper executable on Windows. I was able to acquire `gspawn-win64-helper.exe` and `gspawn-win64-helper.exe` from a Gimp installation, but even with those present the test threw an error that it couldn't read from the subprocess's pipe. Again, not much information online how to solve that. I assume that a proper installation (build) of GLib would not have this issue(?), but I'd decided not to bother with that so I gave up and commented `test_trap_failure_and_stdout` out.
 
-**CMake integration**: More complex than Unity and CUnit, definitely. First of all, on Windows, it's not trivial to get GLib _without_ building it inside the likes of `MSYS2` and without `pkg-config`, both of which I decided not to install in the name of simplicity. Luckily, I use `Gstreamer` anyway, which includes compiled GLib libraries, at least enough for basic functionality. As mentioned above, I wasn't able to get subprocess _traps_ to work, even with a _helper_ executable copied from a Gimp installation. While GLib doesn't provide documentation for CMake (only Meson and Autotools), it wasn't very difficult to set CMake up: instead of configuring with `pkg-config`, though, include and lib directories were added manually.
+**CMake integration**: More complex than Unity and CUnit, definitely. First of all, on Windows, it's not trivial to get GLib _without_ building it inside the likes of `MSYS2` and without `pkg-config`, both of which I decided not to install for the sake of simplicity. Luckily, I use `Gstreamer` anyway, which includes compiled GLib libraries (some - at least enough for basic functionality). As mentioned above, I wasn't able to get subprocess _traps_ to work, even with a _helper_ executable copied from a Gimp installation. While GLib doesn't provide a `CMakeLists.txt` file or documentation for CMake (only Meson and Autotools), it wasn't very difficult to set CMake up based on the pkg-config file in Gstreamer. My solution only appears to be long because of multiple lines of `cmake_path`.
+
+```CMake
+    set(GSTREAMER_ENV_VARNAME "GSTREAMER_1_0_ROOT_MSVC_X86_64")
+    if(NOT DEFINED ENV{${GSTREAMER_ENV_VARNAME}})
+        message(FATAL_ERROR "Gstreamer environment variable \"${GSTREAMER_ENV_VARNAME}\" missing.")
+    endif()
+
+    set(GLIB_PREFIX $ENV{GSTREAMER_1_0_ROOT_MSVC_X86_64})
+    message("Using Gstreamer installation located at \"${GLIB_PREFIX}\"")
+    cmake_path(SET GLIB_PREFIX_DIR NORMALIZE "${GLIB_PREFIX}")
+    cmake_path(APPEND GLIB_PREFIX_DIR "include" OUTPUT_VARIABLE GLIB_INCLUDE_DIR)
+    cmake_path(APPEND GLIB_PREFIX_DIR "lib" OUTPUT_VARIABLE GLIB_LIB_DIR)
+    cmake_path(APPEND GLIB_PREFIX_DIR "bin" OUTPUT_VARIABLE GLIB_BIN_DIR)
+
+    cmake_path(APPEND GLIB_LIB_DIR "glib-2.0.lib" OUTPUT_VARIABLE lib1)
+    cmake_path(APPEND GLIB_BIN_DIR "glib-2.0-0.dll" OUTPUT_VARIABLE dll1)
+    cmake_path(APPEND GLIB_INCLUDE_DIR "glib-2.0" OUTPUT_VARIABLE incl1)
+    cmake_path(APPEND GLIB_LIB_DIR "glib-2.0" "include" OUTPUT_VARIABLE incl2)
+
+    add_library(GLib SHARED IMPORTED GLOBAL)
+    set_target_properties(GLib PROPERTIES
+        IMPORTED_IMPLIB "${lib1}"
+        IMPORTED_LOCATION "${dll1}"
+    )
+    target_include_directories(GLib INTERFACE "${incl1}" "${incl2}")
+```
 
 **General Features**:
 
-- [x] test hierarchy is defined with a "path" (e.g. "/suite_a/test_group_a/test_a"), which allows easy and clear organisation
-- [x] grouping tests into suites, groups using paths is part of basic functionality, nothing special required for multi-suite tests
-- [x] unlike Unity and CUnit, fixtures are not global variables but dynamically allocated types set up and torn down for each test; GLib takes care of allocation and freeing
-- [x] tests can receive fixture data and "global" user data
+- [x] test hierarchy is defined as a "path" (e.g. "/suite_a/test_group_a/test_a"), which allows easy and clear organisation
+- [x] grouping tests into suites and groups is trivial using paths; even using multiple source files
+- [x] unlike Unity and CUnit, fixtures are not global variables but dynamically allocated structs set up and torn down for each test; GLib takes care of allocation and freeing
+- [x] tests can receive fixture data and `gconstpointer` user data
 - [x] multiple test registration functions covering different levels of complexity (no data, only user data, user data with cleanup, full with fixture and user data)
 - [x] _trap_ functionality to run tests that can abort / not return in a subprocess; I couldn't get this to work, though!
 - [x] extras: bug URI association, timer, teardown queue, test summary, log handling, etc.
@@ -194,8 +219,8 @@ Furthermore, the output is not consistent between `unity` and `unity_fixture`. T
 - [x] failures can be non-fatal optionally (per executable option)
 - [x] standard set of type-specific asserts (TRUE/FALSE, NULL, float, (u)int, hex, str)
 - [x] some GLib-specific asserts (error, variant)
-- [x] assert for comparison of NULL-terminated string arrays
 - [x] memory comparison
+- [x] assert for comparison of NULL-terminated string arrays
 - [ ] no other array types supported
 - [ ] no range checking assert variants
 - [ ] no asserts for bit masks
@@ -206,10 +231,38 @@ Furthermore, the output is not consistent between `unity` and `unity_fixture`. T
 - [x] variable values shown in specific tests
 - [ ] no custom messages for failed asserts
 - [x] bug URI and test summary messages (always shown)
-- [x] custom messages possible with `g_test_fail_printf` and `g_test_incomplete_printf`, but these don't coordinate with the asserts; in fact, the messages aren't displayed in the same test that has failing asserts (see `test_func_only_multi_fail` in [single_suite.c](tests/glib/single_suite/single_suite.c))
+- [x] custom messages possible with `g_test_fail_printf` and `g_test_incomplete_printf`, but these don't coordinate with the asserts; in fact, the messages aren't displayed in the same test that has failing asserts (see `test_func_only_multi_fail` and `test_func_only_fail_printf_should_show` in [single_suite.c](tests/glib/single_suite/single_suite.c))
+- [ ] JUnit XML not supported
+- [ ] readable text output formatting not available
+- [ ] `GTester` offers XML output, which can be converted with a 3rd-party scriput to JUnit XML; but it's not a solution I find feasible
 
 ![GLib test result output](images/results_glib.png)
 
-The output's structure is, in my opinion, sub-optimal. I'm happy with the information shown, however, the `ok` or `not ok` lines, and test boundaries in general are difficult to spot, as one's attention is overwhelmed by the long and duplicated error lines. The duplication is due to those lines being sent to both stdout and stderr. While it's possible to reduce the clutter by redirecting one, I'm not sure how to do that with CTest, so the clutter remains.
+The output follows the TAP format, which is enabled by default. I couldn't find a way to switch to a different output format, though, and TAP isn't optimal for reading on the command line. The `ok` or `not ok` lines, and test boundaries in general are difficult to spot, and one's attention is overwhelmed by the long and duplicated error lines. The duplication is due to those lines being sent to both stdout and stderr, and while it's possible to reduce the clutter by redirecting one or the other, I'm not sure how to do that with CTest, so the clutter remains.
 
-GLib Test is a versatile, easy-to-use test framework, which, compared to Unity and CUnit seems to have the best feature set. On the other hand, it's not as easy to build/integrate, unless you're already using GLib for the project.
+### libcester
+
+**Websites**:
+
+- home: <https://exoticlibraries.github.io/libcester/>
+- repo: <https://github.com/exoticlibraries/libcester>
+
+**Activity and Maintainers**: single maintainer; last commit in 2022 Oct; appears to be inactive
+
+**Documentation**: pretty good
+
+**Ease of use**:
+
+**CMake integration**: header-only means simple integration
+
+**General Features**:
+
+- [x] data sharing provided by pre-defined `test_instance` struct that includes command-line arguments and a `void *` pointer
+
+**Asserts**:
+
+- [x]
+
+**Output**:
+
+- [x] supports: TAP, TAP v13, JUnit XML and text formats
